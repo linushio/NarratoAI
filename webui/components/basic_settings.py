@@ -365,6 +365,14 @@ def test_litellm_vision_model(api_key: str, base_url: str, model_name: str, tr) 
             # 设置 OPENAI_API_KEY (SiliconFlow 使用 OpenAI 协议)
             os.environ["OPENAI_API_KEY"] = api_key
             os.environ["OPENAI_API_BASE"] = base_url
+        elif provider.lower() == "qwen":
+            # 替换 provider 为 dashscope
+            if "/" in model_name:
+                test_model_name = f"dashscope/{model_name.split('/', 1)[1]}"
+            else:
+                test_model_name = f"dashscope/{model_name}"
+
+            os.environ["DASHSCOPE_API_KEY"] = api_key
         
         try:
             # 创建测试图片（64x64 白色像素，避免某些模型对极小图片的限制）
@@ -486,7 +494,14 @@ def test_litellm_text_model(api_key: str, base_url: str, model_name: str, tr) ->
             # 设置 OPENAI_API_KEY (SiliconFlow 使用 OpenAI 协议)
             os.environ["OPENAI_API_KEY"] = api_key
             os.environ["OPENAI_API_BASE"] = base_url
-        
+        elif provider.lower() == "qwen":
+            # 替换 provider 为 dashscope
+            if "/" in model_name:
+                test_model_name = f"dashscope/{model_name.split('/', 1)[1]}"
+            else:
+                test_model_name = f"dashscope/{model_name}"
+
+            os.environ["DASHSCOPE_API_KEY"] = api_key
         try:
             # 构建测试请求
             messages = [

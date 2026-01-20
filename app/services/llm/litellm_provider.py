@@ -205,6 +205,14 @@ class LiteLLMVisionProvider(VisionModelProvider):
                 # 确保设置了 base_url (如果尚未设置)
                 if not hasattr(self, '_api_base'):
                      self._api_base = "https://api.siliconflow.cn/v1"
+            elif self.model_name.lower().startswith("qwen/"):
+                if "/" in self.model_name:
+                    effective_model_name = f"dashscope/{self.model_name.split('/', 1)[1]}"
+                else:
+                    effective_model_name = f"dashscope/{self.model_name}"
+                import os
+                if not os.environ.get("DASHSCOPE_API_KEY") and os.environ.get("QWEN_API_KEY"):
+                    os.environ["DASHSCOPE_API_KEY"] = os.environ.get("QWEN_API_KEY")
 
             completion_kwargs = {
                 "model": effective_model_name,
@@ -389,6 +397,14 @@ class LiteLLMTextProvider(TextModelProvider):
             # 确保设置了 base_url (如果尚未设置)
             if not hasattr(self, '_api_base'):
                     self._api_base = "https://api.siliconflow.cn/v1"
+        elif self.model_name.lower().startswith("qwen/"):
+            if "/" in self.model_name:
+                effective_model_name = f"dashscope/{self.model_name.split('/', 1)[1]}"
+            else:
+                effective_model_name = f"dashscope/{self.model_name}"
+            import os
+            if not os.environ.get("DASHSCOPE_API_KEY") and os.environ.get("QWEN_API_KEY"):
+                os.environ["DASHSCOPE_API_KEY"] = os.environ.get("QWEN_API_KEY")
 
         completion_kwargs = {
             "model": effective_model_name,
